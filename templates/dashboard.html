@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="grid-3">
+
+    <div class="card">
+        <h2>Current Health Score</h2>
+        <p class="big-number">{{ data.health|round(1) }}/100</p>
+        <p>Average Health: {{ data.avg_health }}/100</p>
+    </div>
+
+    <div class="card">
+        <h2>Risk Distribution</h2>
+        <canvas id="riskChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>System Metrics</h2>
+        <p>Total Predictions: <strong>{{ data.total_predictions }}</strong></p>
+        <p>High Risk Cases: <strong>{{ data.high_risk_cases }}</strong></p>
+        <p>Medium Risk Cases: <strong>{{ data.medium_risk_cases }}</strong></p>
+        <p>Low Risk Cases: <strong>{{ data.low_risk_cases }}</strong></p>
+    </div>
+
+</div>
+
+<!-- Logs Table -->
+<div class="card">
+    <h2>Prediction Logs</h2>
+
+    {% if logs %}
+        <table>
+            <tr>
+                <th>Time</th>
+                <th>Temp</th>
+                <th>Fuel</th>
+                <th>Vibration</th>
+                <th>Odometer</th>
+                <th>Coolant</th>
+                <th>Battery</th>
+                <th>Prob (%)</th>
+                <th>Risk</th>
+            </tr>
+
+            {% for row in logs %}
+            <tr>
+                <td>{{ row.timestamp }}</td>
+                <td>{{ row.engine_temp|round(1) }}</td>
+                <td>{{ row.fuel_efficiency|round(1) }}</td>
+                <td>{{ row.vibration_level|round(1) }}</td>
+                <td>{{ row.odometer }}</td>
+                <td>{{ row.coolant_level }}</td>
+                <td>{{ row.battery_voltage }}</td>
+                <td>{{ row.prob }}</td>
+                <td>{{ row.risk }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% else %}
+        <p>No logs yet. Make predictions first.</p>
+    {% endif %}
+
+</div>
+
+
+<script>
+const high = Number('{{ data.high_risk_cases }}');
+const medium = Number('{{ data.medium_risk_cases }}');
+const low = Number('{{ data.low_risk_cases }}');
+
+new Chart(document.getElementById("riskChart"), {
+    type: "pie",
+    data: {
+        labels: ["High Risk", "Medium Risk", "Low Risk"],
+        datasets: [{
+            data: [high, medium, low],
+        }]
+    }
+});
+</script>
+
+{% endblock %}

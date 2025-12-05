@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card center-card">
+    <h1>Predictive Automotive Maintenance</h1>
+    <p>End-to-end intelligent system with ML, agent workflow, dashboard & logs.</p>
+
+    <div class="button-row">
+        <a href="{{ url_for('predict') }}" class="btn primary">Predict Failure</a>
+        <a href="{{ url_for('workflow') }}" class="btn secondary">Agent Workflow</a>
+        <a href="{{ url_for('dashboard') }}" class="btn secondary">Dashboard</a>
+    </div>
+</div>
+
+{% endblock %}

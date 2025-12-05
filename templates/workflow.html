@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>Agentic Workflow Simulation</h2>
+    <p>Current Risk Level: <strong>{{ risk }}</strong></p>
+
+    <div class="workflow-container">
+        {% for step in steps %}
+            <div class="workflow-step" id="step{{ loop.index }}">
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.text }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button class="btn primary" onclick="startWorkflow()">Run Workflow</button>
+</div>
+
+<script>
+function startWorkflow() {
+    const total = parseInt('{{ steps|length }}');  // Jinja inside a JS string
+    let index = 1;
+
+    for (let i = 1; i <= total; i++) {
+        const box = document.getElementById("step" + i);
+        if (box) box.classList.remove("active");
+    }
+
+    function activate() {
+        if (index <= total) {
+            const box = document.getElementById("step" + index);
+            if (box) box.classList.add("active");
+            index++;
+            setTimeout(activate, 1000);
+        }
+    }
+    activate();
+}
+</script>
+
+
+{% endblock %}
